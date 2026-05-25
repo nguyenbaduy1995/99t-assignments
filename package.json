@@ -1,0 +1,16 @@
+{
+  "name": "99tech-assignment",
+  "private": true,
+  "workspaces": [
+    "sum-n-3ways",
+    "fancy-form",
+    "messy-react"
+  ],
+  "scripts": {
+    "dev:sum": "npm run dev -w sum-n-3ways",
+    "dev:form": "npm run dev -w fancy-form",
+    "dev:messy": "npm run dev -w messy-react",
+    "build": "npm run build -ws",
+    "lint": "npm run lint -ws"
+  }
+}
