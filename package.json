@@ -7,9 +7,7 @@
     "messy-react"
   ],
   "scripts": {
-    "dev:sum": "npm run dev -w sum-n-3ways",
-    "dev:form": "npm run dev -w fancy-form",
-    "dev:messy": "npm run dev -w messy-react",
+    "dev": "npm run dev -w fancy-form",
     "build": "npm run build -ws",
     "lint": "npm run lint -ws"
   }
