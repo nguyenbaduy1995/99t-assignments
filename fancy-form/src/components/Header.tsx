@@ -10,38 +10,32 @@ export function Header() {
         mb: { xs: 3, sm: 4 },
       }}
     >
-      <Box
-        component="img"
-        src="/cat.svg"
-        alt="Choco Coin"
-        sx={{
-          width: { xs: 72, sm: 96 },
-          height: { xs: 72, sm: 96 },
-          borderRadius: 3,
-          mb: 2,
-        }}
-      />
       <Typography
-        variant="h4"
+        variant="h3"
         component="h1"
         align="center"
-        sx={(theme) => ({
-          color: theme.palette.primary.main,
+        sx={{
           fontWeight: 700,
-          fontSize: { xs: "1.5rem", sm: "2rem", md: "2.25rem" },
-        })}
+          fontSize: { xs: "1.75rem", sm: "2.5rem", md: "3rem" },
+          color: "#ffffff",
+          mb: 1,
+        }}
       >
-        Choco Coin Exchange
+        Trade crypto with{" "}
+        <Box component="span" sx={{ color: "primary.main" }}>
+          lightning speed
+        </Box>
       </Typography>
       <Typography
         variant="body1"
-        sx={(theme) => ({
-          color: theme.palette.primary.main,
-          fontSize: { xs: "0.85rem", sm: "1rem" },
-          mt: 1,
-        })}
+        sx={{
+          color: "rgba(255, 255, 255, 0.6)",
+          fontSize: { xs: "0.9rem", sm: "1.1rem" },
+          textAlign: "center",
+          maxWidth: 500,
+        }}
       >
-        Swap your crypto with a purr-fect rate
+        Swap tokens instantly with the lowest fees. No registration required.
       </Typography>
     </Box>
   );

@@ -10,18 +10,25 @@ export function ErrorState({ message }: ErrorStateProps) {
       sx={{
         textAlign: "center",
         p: 4,
-        bgcolor: "error.light",
-        borderRadius: 2,
+        bgcolor: "rgba(239, 68, 68, 0.1)",
+        borderRadius: "16px",
+        border: "1px solid rgba(239, 68, 68, 0.3)",
       }}
     >
-      <Typography color="error.dark" gutterBottom>
+      <Typography sx={{ color: "error.main" }} gutterBottom>
         {message}
       </Typography>
       <Button
         variant="contained"
-        color="error"
         onClick={() => window.location.reload()}
-        sx={{ mt: 2 }}
+        sx={{
+          mt: 2,
+          bgcolor: "error.main",
+          color: "#ffffff",
+          "&:hover": {
+            bgcolor: "#dc2626",
+          },
+        }}
       >
         Retry
       </Button>

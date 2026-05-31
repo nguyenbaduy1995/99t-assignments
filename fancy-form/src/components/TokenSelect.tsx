@@ -10,19 +10,23 @@ import {
   InputAdornment,
   ButtonBase,
   Stack,
+  Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import type { Token } from "../types";
+import { TokenIcon } from "./TokenIcon";
 import { formatPrice } from "../utils/format";
+import { POPULAR_TOKENS } from "../constants";
+import type { Token } from "../types";
 
 interface TokenSelectProps {
   tokens: Token[];
   value: string;
   onChange: (value: string) => void;
-  label: string;
+  label?: string;
   id: string;
+  disabledCurrency?: string;
 }
 
 export function TokenSelect({
@@ -31,6 +35,7 @@ export function TokenSelect({
   onChange,
   label,
   id,
+  disabledCurrency,
 }: TokenSelectProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -46,6 +51,7 @@ export function TokenSelect({
   }, [tokens, search]);
 
   const handleOpen = useCallback(() => setOpen(true), []);
+
   const handleClose = useCallback(() => {
     setOpen(false);
     setSearch("");
@@ -57,12 +63,11 @@ export function TokenSelect({
       setOpen(false);
       setSearch("");
     },
-    [onChange]
+    [onChange],
   );
 
   return (
     <>
-      {/* Trigger Button */}
       <Box>
         {label && (
           <Typography
@@ -72,7 +77,7 @@ export function TokenSelect({
               display: "block",
               fontSize: "0.75rem",
               fontWeight: 500,
-              color: "grey.600",
+              color: "rgba(255, 255, 255, 0.6)",
               mb: 1,
               height: 18,
             }}
@@ -86,40 +91,31 @@ export function TokenSelect({
           sx={{
             display: "flex",
             alignItems: "center",
-            flexDirection: "row",
             justifyContent: "space-between",
             gap: 1,
             px: 2,
-            height: 56,
-            borderRadius: 3,
-            bgcolor: "white",
-            border: "1px solid",
-            borderColor: "grey.300",
+            height: 48,
+            borderRadius: "24px",
+            bgcolor: "rgba(255, 255, 255, 0.1)",
             transition: "all 0.2s",
-            "&:hover": {
-              borderColor: "primary.main",
-              bgcolor: "rgba(236, 72, 153, 0.04)",
-            },
-            width: { xs: "100%", sm: 180 },
+            "&:hover": { bgcolor: "rgba(255, 255, 255, 0.15)" },
+            minWidth: 130,
           }}
         >
           <Stack direction="row" alignItems="center" spacing={1}>
             {selectedToken && <TokenIcon token={selectedToken} size={24} />}
             <Typography
-              sx={{
-                fontWeight: 600,
-                fontSize: "1rem",
-                color: "grey.800",
-              }}
+              sx={{ fontWeight: 600, fontSize: "1rem", color: "#ffffff" }}
             >
               {selectedToken?.currency || "Select"}
             </Typography>
           </Stack>
-          <KeyboardArrowDownIcon sx={{ color: "grey.500", fontSize: 20 }} />
+          <KeyboardArrowDownIcon
+            sx={{ color: "rgba(255, 255, 255, 0.6)", fontSize: 20 }}
+          />
         </ButtonBase>
       </Box>
 
-      {/* Token Select Dialog */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -127,8 +123,10 @@ export function TokenSelect({
         fullWidth
         PaperProps={{
           sx: {
-            borderRadius: 3,
+            borderRadius: "16px",
             maxHeight: "80vh",
+            bgcolor: "#1a1a24",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
           },
         }}
       >
@@ -140,16 +138,19 @@ export function TokenSelect({
             pb: 1,
           }}
         >
-          <Typography variant="h6" fontWeight={600}>
+          <Typography variant="h6" fontWeight={600} color="#ffffff">
             Select a token
           </Typography>
-          <IconButton onClick={handleClose} size="small">
+          <IconButton
+            onClick={handleClose}
+            size="small"
+            sx={{ color: "rgba(255, 255, 255, 0.6)" }}
+          >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
 
         <DialogContent sx={{ p: 0 }}>
-          {/* Search Input */}
           <Box sx={{ px: 2, pb: 2 }}>
             <TextField
               fullWidth
@@ -161,124 +162,191 @@ export function TokenSelect({
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon sx={{ color: "grey.400" }} />
+                      <SearchIcon sx={{ color: "rgba(255, 255, 255, 0.4)" }} />
                     </InputAdornment>
                   ),
                 },
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: 2,
-                  bgcolor: "grey.50",
+                  borderRadius: "12px",
+                  bgcolor: "rgba(255, 255, 255, 0.05)",
                 },
               }}
             />
           </Box>
 
-          {/* Token List */}
-          <Box
-            sx={{
-              maxHeight: 350,
-              overflow: "auto",
-              px: 1,
-              pb: 1,
-            }}
-          >
-            {filteredTokens.length === 0 ? (
-              <Typography color="grey.500" textAlign="center" sx={{ py: 4 }}>
-                No tokens found
-              </Typography>
-            ) : (
-              filteredTokens.map((token) => (
-                <ButtonBase
-                  key={token.currency}
-                  onClick={() => handleSelect(token.currency)}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                    width: "100%",
-                    px: 1.5,
-                    py: 1.5,
-                    borderRadius: 2,
-                    justifyContent: "flex-start",
-                    transition: "background 0.15s",
-                    bgcolor:
-                      token.currency === value
-                        ? "rgba(236, 72, 153, 0.08)"
-                        : "transparent",
-                    "&:hover": {
-                      bgcolor:
-                        token.currency === value
-                          ? "rgba(236, 72, 153, 0.12)"
-                          : "grey.100",
-                    },
-                  }}
-                >
-                  <TokenIcon token={token} size={36} />
-                  <Box sx={{ textAlign: "left" }}>
-                    <Typography
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: "1rem",
-                        color: "grey.800",
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {token.currency}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "0.75rem",
-                        color: "grey.500",
-                      }}
-                    >
-                      ${formatPrice(token.price)}
-                    </Typography>
-                  </Box>
-                  {token.currency === value && (
-                    <Box
-                      sx={{
-                        ml: "auto",
-                        width: 8,
-                        height: 8,
-                        borderRadius: "50%",
-                        bgcolor: "primary.main",
-                      }}
-                    />
-                  )}
-                </ButtonBase>
-              ))
-            )}
-          </Box>
+          <PopularTokens
+            tokens={tokens}
+            value={value}
+            disabledCurrency={disabledCurrency}
+            onSelect={handleSelect}
+          />
+
+          <TokenList
+            tokens={filteredTokens}
+            value={value}
+            disabledCurrency={disabledCurrency}
+            onSelect={handleSelect}
+          />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-const FALLBACK_ICON = "/cat.svg";
+interface PopularTokensProps {
+  tokens: Token[];
+  value: string;
+  disabledCurrency?: string;
+  onSelect: (currency: string) => void;
+}
 
-function TokenIcon({ token, size = 24 }: { token: Token; size?: number }) {
-  const [hasError, setHasError] = useState(false);
+function PopularTokens({
+  tokens,
+  value,
+  disabledCurrency,
+  onSelect,
+}: PopularTokensProps) {
+  return (
+    <Box sx={{ px: 2, pb: 2 }}>
+      <Typography
+        sx={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.5)", mb: 1 }}
+      >
+        Popular
+      </Typography>
+      <Stack direction="row" useFlexGap spacing={1.5} sx={{ flexWrap: "wrap" }}>
+        {POPULAR_TOKENS.map((currency) => {
+          const isSelected = currency === value;
+          const isDisabled = currency === disabledCurrency;
+          const token = tokens.find((t) => t.currency === currency);
 
-  const handleError = useCallback(() => {
-    setHasError(true);
-  }, []);
+          return (
+            <Chip
+              key={currency}
+              label={currency}
+              size="medium"
+              disabled={isDisabled}
+              onClick={() => !isDisabled && onSelect(currency)}
+              avatar={token ? <TokenIcon token={token} size={24} /> : undefined}
+              sx={{
+                bgcolor: isSelected
+                  ? "primary.main"
+                  : "rgba(255, 255, 255, 0.08)",
+                color: isSelected ? "#0a0a0f" : "rgba(255, 255, 255, 0.8)",
+                fontWeight: 600,
+                fontSize: "0.875rem",
+                cursor: isDisabled ? "not-allowed" : "pointer",
+                opacity: isDisabled ? 0.4 : 1,
+                px: 1,
+                py: 2.5,
+                "& .MuiChip-avatar": { width: 24, height: 24, ml: 0.5 },
+                "&:hover": {
+                  bgcolor: isDisabled
+                    ? "rgba(255, 255, 255, 0.08)"
+                    : isSelected
+                      ? "primary.main"
+                      : "rgba(255, 255, 255, 0.15)",
+                },
+              }}
+            />
+          );
+        })}
+      </Stack>
+    </Box>
+  );
+}
+
+interface TokenListProps {
+  tokens: Token[];
+  value: string;
+  disabledCurrency?: string;
+  onSelect: (currency: string) => void;
+}
+
+function TokenList({
+  tokens,
+  value,
+  disabledCurrency,
+  onSelect,
+}: TokenListProps) {
+  if (tokens.length === 0) {
+    return (
+      <Typography
+        color="rgba(255, 255, 255, 0.5)"
+        textAlign="center"
+        sx={{ py: 4 }}
+      >
+        No tokens found
+      </Typography>
+    );
+  }
 
   return (
-    <Box
-      component="img"
-      src={hasError ? FALLBACK_ICON : token.icon}
-      alt={`${token.currency} icon`}
-      sx={{
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        bgcolor: "grey.200",
-        objectFit: "cover",
-      }}
-      onError={hasError ? undefined : handleError}
-    />
+    <Box sx={{ maxHeight: 350, overflow: "auto", px: 1, pb: 1 }}>
+      {tokens.map((token) => {
+        const isDisabled = token.currency === disabledCurrency;
+        const isSelected = token.currency === value;
+
+        return (
+          <ButtonBase
+            key={token.currency}
+            onClick={() => !isDisabled && onSelect(token.currency)}
+            disabled={isDisabled}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              width: "100%",
+              px: 1.5,
+              py: 1.5,
+              borderRadius: "12px",
+              justifyContent: "flex-start",
+              transition: "background 0.15s",
+              opacity: isDisabled ? 0.4 : 1,
+              cursor: isDisabled ? "not-allowed" : "pointer",
+              bgcolor: isSelected ? "rgba(6, 182, 212, 0.15)" : "transparent",
+              "&:hover": {
+                bgcolor: isDisabled
+                  ? "transparent"
+                  : isSelected
+                    ? "rgba(6, 182, 212, 0.2)"
+                    : "rgba(255, 255, 255, 0.05)",
+              },
+            }}
+          >
+            <TokenIcon token={token} size={36} />
+            <Box sx={{ textAlign: "left" }}>
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "1rem",
+                  color: "#ffffff",
+                  lineHeight: 1.2,
+                }}
+              >
+                {token.currency}
+              </Typography>
+              <Typography
+                sx={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.5)" }}
+              >
+                ${formatPrice(token.price)}
+              </Typography>
+            </Box>
+            {isSelected && (
+              <Box
+                sx={{
+                  ml: "auto",
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  bgcolor: "primary.main",
+                }}
+              />
+            )}
+          </ButtonBase>
+        );
+      })}
+    </Box>
   );
 }

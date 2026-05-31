@@ -10,8 +10,10 @@ export function LoadingState() {
         gap: 2,
       }}
     >
-      <CircularProgress color="primary" />
-      <Typography color="text.secondary">Loading tokens...</Typography>
+      <CircularProgress sx={{ color: "primary.main" }} />
+      <Typography sx={{ color: "rgba(255, 255, 255, 0.6)" }}>
+        Loading tokens...
+      </Typography>
     </Box>
   );
 }

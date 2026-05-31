@@ -15,8 +15,9 @@ export function Layout({ children }: LayoutProps) {
         alignItems: "center",
         justifyContent: "center",
         p: { xs: 1, sm: 2, md: 3 },
+        bgcolor: "#0a0a0f",
         background:
-          "linear-gradient(135deg, #fdf2f8 0%, #fce7f3 30%, #f5d0fe 70%, #e9d5ff 100%)",
+          "radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%), #0a0a0f",
       }}
     >
       {children}

@@ -1,8 +1,5 @@
 export function formatNumber(num: number): string {
-  if (num >= 1) {
-    return num.toLocaleString(undefined, { maximumFractionDigits: 6 });
-  }
-  return num.toPrecision(6);
+  return num.toLocaleString(undefined, { maximumFractionDigits: 4 });
 }
 
 export function formatAmountWithCommas(value: string): string {
@@ -30,7 +27,8 @@ export function parseAmountFromCommas(value: string): string {
   return value.replace(/,/g, "");
 }
 
-export function formatPrice(price: number): string {
+export function formatPrice(price: number | undefined | null): string {
+  if (price == null || isNaN(price)) return "0.00";
   if (price >= 1) {
     return price.toLocaleString(undefined, { maximumFractionDigits: 2 });
   }
